@@ -38,9 +38,9 @@ namespace robot_localization_demo {
       ros::spinOnce();
       // Distort real pose to get a 'measurement'.
       auto measurement = cached_pose_;
-      measurement.x += random_distribution_x_(random_generator_);
-      measurement.y += random_distribution_y_(random_generator_);
-      measurement.theta += random_distribution_yaw_(random_generator_);
+      //measurement.x += random_distribution_x_(random_generator_);
+      //measurement.y += random_distribution_y_(random_generator_);
+      //measurement.theta += random_distribution_yaw_(random_generator_);
       // Publish measurement.
       geometry_msgs::PoseWithCovarianceStamped current_pose;
       current_pose.header.seq = ++ frame_sequence_;
@@ -93,13 +93,13 @@ namespace robot_localization_demo {
       configure_visualization_turtle.request.r = 0;
       configure_visualization_turtle.request.g = 0;
       configure_visualization_turtle.request.b = 255;
-      configure_visualization_turtle.request.width = 1;
+      configure_visualization_turtle.request.width = 2;
       configure_visualization_turtle.request.off = 0;
       auto client_configure = node_handle_.serviceClient<decltype(configure_visualization_turtle)>(
           visualization_turtle_name_ + "/set_pen");
       client_configure.call(configure_visualization_turtle);
       // Log message.
-      ROS_INFO("Absolute position measurement visualized by '%s' using a blue pen.", visualization_turtle_name_.c_str());
+      ROS_INFO("Absolute position (GPS) measurement visualized by '%s' using a blue pen.", visualization_turtle_name_.c_str());
     }
   }
 

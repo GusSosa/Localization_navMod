@@ -9,11 +9,15 @@ project(robot_localization_demo)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
+  sensor_msgs
   robot_localization
   roscpp
   tf2
   turtlesim
 )
+
+set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -173,6 +177,15 @@ add_executable(odometry_node
   src/sensors/odometry.cpp
 )
 target_link_libraries(odometry_node
+  ${catkin_LIBRARIES}
+  Boost::program_options
+)
+
+add_executable(imu_data_node
+  src/sensors/imu_data_node.cpp
+  src/sensors/imu_data.cpp
+)
+target_link_libraries(imu_data_node
   ${catkin_LIBRARIES}
   Boost::program_options
 )

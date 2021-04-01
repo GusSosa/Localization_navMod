@@ -81,18 +81,21 @@ namespace robot_localization_demo {
       // Spawn a new turtle and store its name.
       ros::service::waitForService("spawn");
       turtlesim::Spawn spawn_visualization_turtle;
-      spawn_visualization_turtle.request.x = initial_pose.x;
-      spawn_visualization_turtle.request.y = initial_pose.y;
-      spawn_visualization_turtle.request.theta = initial_pose.theta;
+      //spawn_visualization_turtle.request.x = initial_pose.x;
+      //spawn_visualization_turtle.request.y = initial_pose.y;
+      //spawn_visualization_turtle.request.theta = initial_pose.theta;
+      spawn_visualization_turtle.request.x = 0.;
+      spawn_visualization_turtle.request.y = 0.;
+      spawn_visualization_turtle.request.theta = 0.;
       auto client = node_handle_.serviceClient<decltype(spawn_visualization_turtle)>("spawn");
       client.call(spawn_visualization_turtle);
       visualization_turtle_name_ = spawn_visualization_turtle.response.name;
-      // Set pen color to blue.
+      // Set pen color to red.
       turtlesim::SetPen configure_visualization_turtle;
       configure_visualization_turtle.request.r = 255;
       configure_visualization_turtle.request.g = 0;
       configure_visualization_turtle.request.b = 0;
-      configure_visualization_turtle.request.width = 1;
+      configure_visualization_turtle.request.width = 2;
       configure_visualization_turtle.request.off = 0;
       auto client_configure = node_handle_.serviceClient<decltype(configure_visualization_turtle)>(
           visualization_turtle_name_ + "/set_pen");

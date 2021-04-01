@@ -19,24 +19,24 @@ int main(int argc, char** argv) {
   // Spawn a new turtle and store its name.
   ros::service::waitForService("spawn");
   turtlesim::Spawn spawn_visualization_turtle;
-  spawn_visualization_turtle.request.x = 0;
-  spawn_visualization_turtle.request.y = 0;
+  spawn_visualization_turtle.request.x = 5.5;
+  spawn_visualization_turtle.request.y = 5.5;
   spawn_visualization_turtle.request.theta = 0;
   auto client_spawn = node_handle.serviceClient<decltype(spawn_visualization_turtle)>("spawn");
   client_spawn.call(spawn_visualization_turtle);
   auto visualization_turtle_name = spawn_visualization_turtle.response.name;
   // Set pen color to light blue.
   turtlesim::SetPen configure_visualization_turtle;
-  configure_visualization_turtle.request.r = 0;
-  configure_visualization_turtle.request.g = 255;
-  configure_visualization_turtle.request.b = 0;
-  configure_visualization_turtle.request.width = 3;
+  configure_visualization_turtle.request.r = 150;
+  configure_visualization_turtle.request.g = 0;
+  configure_visualization_turtle.request.b = 150;
+  configure_visualization_turtle.request.width = 8;
   configure_visualization_turtle.request.off = 0;
   auto client_configure = node_handle.serviceClient<decltype(configure_visualization_turtle)>(
       visualization_turtle_name + "/set_pen");
   client_configure.call(configure_visualization_turtle);
   // Log message.
-  ROS_INFO("Absolute position estimate visualized by '%s' using a green pen.", visualization_turtle_name.c_str());
+  ROS_INFO("Absolute position estimate visualized by '%s' using a purple pen.", visualization_turtle_name.c_str());
 
   // Visualize the estimated position of the turtle in the map frame.
   ros::Rate rate(10.0);
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
     // Get base_link to map transformation.
     geometry_msgs::TransformStamped base_link_to_map_transform;
     try {
-      base_link_to_map_transform = tf_buffer.lookupTransform("map", "base_link", ros::Time(0));
+      base_link_to_map_transform = tf_buffer.lookupTransform("map", "base_link", ros::Time(0)); //se actualiza la transformación entre map y base_link
     }
     catch (tf2::TransformException &ex) {
       ROS_INFO("tf2_ros::Buffer::lookupTransform failed: %s", ex.what());
@@ -64,6 +64,7 @@ int main(int argc, char** argv) {
     pose_base_link.pose.orientation.w = 1.;
     tf2::doTransform(pose_base_link, pose_map, base_link_to_map_transform);
     turtlesim::TeleportAbsolute visualize_current_pose;
+    //Recibe la posición en el mapa
     visualize_current_pose.request.x = pose_map.pose.position.x;
     visualize_current_pose.request.y = pose_map.pose.position.y;
     tf2::Quaternion quaternion(pose_map.pose.orientation.x, pose_map.pose.orientation.y, pose_map.pose.orientation.z, pose_map.pose.orientation.w);
